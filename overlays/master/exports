@@ -1,0 +1,21 @@
+# /etc/exports
+#
+# See exports(5) for more information.
+#
+# Use exportfs -r to reread
+# /export	192.168.1.10(rw,no_root_squash)
+
+# NFSv4 server root
+/srv/nfs 172.23.199.0/24(sec=sys,ro,no_subtree_check,fsid=root)
+
+# Cluster root never allows writes; overlays allow local writes to memory
+/srv/nfs/root \
+	172.23.199.226(sec=sys,ro,no_subtree_check,mountpoint,no_root_squash) \
+	172.23.199.227(sec=sys,ro,no_subtree_check,mountpoint,no_root_squash) \
+	172.23.199.228(sec=sys,ro,no_subtree_check,mountpoint,no_root_squash)
+
+# Cluster home allows writes to nodes
+/srv/nfs/home \
+	172.23.199.226(sec=sys,rw,no_subtree_check,mountpoint,no_root_squash) \
+	172.23.199.227(sec=sys,rw,no_subtree_check,mountpoint,no_root_squash) \
+	172.23.199.228(sec=sys,rw,no_subtree_check,mountpoint,no_root_squash)

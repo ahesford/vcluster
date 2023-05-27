@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# Default rc.local for void; add your custom commands here.
+#
+# This is run by runit in stage 2 before the services are executed
+# (see /etc/runit/2).
+
+[ -r /etc/runit/functions ] && . /etc/runit/functions
+
+# Suppress podman warnings about /
+mount --make-rshared /
+
+# Bind-mount root directory for the NFS server
+if mountpoint -q /run/rootfs/lower; then
+	msg "Binding root underlay to /srv/nfs/root..."
+	mkdir -p /srv/nfs/root
+	mount --bind /run/rootfs/lower /srv/nfs/root
+	mount --make-private /srv/nfs/root
+fi
+
+# Bind-mount home directory and its children for the NFS server
+if mountpoint -q /home; then
+	msg "Binding home filesystems to /srv/nfs/home..."
+	mkdir -p /srv/nfs/home
+	mount --rbind /home /srv/nfs/home
+	mount --make-rslave /srv/nfs/home
+fi
