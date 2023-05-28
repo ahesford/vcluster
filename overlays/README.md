@@ -47,9 +47,11 @@ corresponding paths for any node overlay to enable services on a per-node
 basis.
 
 The file `master/fstab` defines a mount of the EFI system partition by UUID;
-this UUID should be replaced with the value reported by
+this UUID can be replaced with the value reported by
 
     lsblk -n -o uuid ${esp_blkdev}
 
 for a device node `${esp_blkdev}` that refers to your specific EFI system
-partition.
+partition. However, it is probably best to disregard this sample `fstab` and
+instead copy the file from the running system that forms the basis for the
+master node.
